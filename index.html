@@ -186,29 +186,25 @@ nav {
 }
 .orb-pills {
   position: absolute;
-  inset: 0;
-  animation: counterSpin 6s linear infinite;
-}
-@keyframes counterSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+  inset: -32px;
+  pointer-events: none;
 }
 .pill {
   position: absolute;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 100px;
-  padding: 5px 12px;
+  padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
   color: var(--ink2);
   white-space: nowrap;
-  box-shadow: 0 2px 12px rgba(10,14,26,0.06);
+  box-shadow: 0 2px 16px rgba(10,14,26,0.07);
 }
-.pill-1 { top: -8px; left: 50%; transform: translateX(-50%); }
-.pill-2 { top: 50%; right: -64px; transform: translateY(-50%); }
-.pill-3 { bottom: -8px; left: 50%; transform: translateX(-50%); }
-.pill-4 { top: 50%; left: -64px; transform: translateY(-50%); }
+.pill-1 { top: 0px; left: 50%; transform: translateX(-50%); }
+.pill-2 { top: 50%; right: 0px; transform: translateY(-50%); }
+.pill-3 { bottom: 0px; left: 50%; transform: translateX(-50%); }
+.pill-4 { top: 50%; left: 0px; transform: translateY(-50%); }
 .pill-val { color: var(--cyan); }
 
 /* HERO CTA */
