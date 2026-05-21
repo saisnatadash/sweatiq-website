@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SweatIQ - Hydration Intelligence</title>
+<meta name="description" content="SweatIQ is a wearable biosensing platform that monitors hydration and electrolytes through sweat, in real time." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F7F8FC;
+  --white: #ffffff;
+  --ink: #0A0E1A;
+  --ink2: #3A3F52;
+  --muted: #8892AA;
+  --cyan: #00BFDF;
+  --border: rgba(10,14,26,0.08);
+  --font-d: 'Bricolage Grotesque', sans-serif;
+  --font-b: 'Plus Jakarta Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-b);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 56px;
+  background: rgba(247,248,252,0.88);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: var(--font-d);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.logo em { color: var(--cyan); font-style: normal; }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-d);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: #1a2035; }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 140px 24px 100px;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  letter-spacing: 0.5px;
+  margin-bottom: 36px;
+  animation: fadeIn 0.8s ease both;
+}
+.live-dot {
+  width: 7px; height: 7px;
+  background: var(--cyan);
+  border-radius: 50%;
+  animation: livepulse 2s infinite;
+}
+@keyframes livepulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,191,223,0.5); }
+  50% { box-shadow: 0 0 0 5px rgba(0,191,223,0); }
+}
+.hero-title {
+  font-family: var(--font-d);
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 0.96;
+  color: var(--ink);
+  max-width: 900px;
+  margin: 0 auto 28px;
+  animation: fadeIn 0.9s 0.1s ease both;
+}
+.hero-title .c { color: var(--cyan); }
+.hero-sub {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 48px;
+  font-weight: 400;
+  line-height: 1.7;
+  animation: fadeIn 0.9s 0.2s ease both;
+}
+
+/* SENSOR ORB - THE ONE MOTION ELEMENT */
+.sensor-orb-wrap {
+  margin: 0 auto 64px;
+  animation: fadeIn 1s 0.25s ease both;
+}
+.sensor-orb {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  margin: 0 auto;
+}
+.sensor-orb svg.arc-ring {
+  position: absolute;
+  inset: 0;
+  animation: spinArc 6s linear infinite;
+}
+@keyframes spinArc {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.orb-core {
+  position: absolute;
+  inset: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(0,191,223,0.18), rgba(0,100,180,0.06) 70%);
+  border: 1px solid rgba(0,191,223,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: breathe 4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,191,223,0.12); }
+  50% { transform: scale(1.04); box-shadow: 0 0 40px 8px rgba(0,191,223,0.08); }
+}
+.orb-num {
+  font-family: var(--font-d);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--ink);
+  line-height: 1;
+}
+.orb-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-top: 4px;
+}
+.orb-pills {
+  position: absolute;
+  inset: 0;
+  animation: counterSpin 6s linear infinite;
+}
+@keyframes counterSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+.pill {
+  position: absolute;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink2);
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(10,14,26,0.06);
+}
+.pill-1 { top: -8px; left: 50%; transform: translateX(-50%); }
+.pill-2 { top: 50%; right: -64px; transform: translateY(-50%); }
+.pill-3 { bottom: -8px; left: 50%; transform: translateX(-50%); }
+.pill-4 { top: 50%; left: -64px; transform: translateY(-50%); }
+.pill-val { color: var(--cyan); }
+
+/* HERO CTA */
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeIn 0.9s 0.3s ease both;
+}
+.btn-dark {
+  background: var(--ink);
+  color: #fff;
+  padding: 15px 32px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-d);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-dark:hover { background: #1a2035; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  padding: 15px 32px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-d);
+  text-decoration: none;
+  border: 1px solid rgba(10,14,26,0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-outline:hover { border-color: var(--ink); background: rgba(10,14,26,0.04); }
+
+.divider { height: 1px; background: var(--border); }
+
+/* SECTIONS */
+section.s { padding: 140px 24px; }
+.container { max-width: 1080px; margin: 0 auto; }
+.s-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 20px;
+}
+.s-title {
+  font-family: var(--font-d);
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.s-body {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+/* PROBLEM */
+#problem { background: var(--white); }
+.problem-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+.problem-text .s-body { max-width: 400px; margin-bottom: 40px; }
+.problem-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.pstat {
+  background: var(--white);
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  transition: background 0.2s;
+}
+.pstat:hover { background: var(--bg); }
+.pstat-num {
+  font-family: var(--font-d);
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -3px;
+  color: var(--cyan);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.pstat-desc { font-size: 14px; color: var(--ink2); line-height: 1.55; font-weight: 400; }
+
+/* TRACKS */
+#tracks { background: var(--bg); }
+.tracks-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.track {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px 20px;
+  transition: all 0.25s;
+  cursor: default;
+}
+.track:hover {
+  border-color: rgba(0,191,223,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,191,223,0.08);
+}
+.track-icon { font-size: 24px; margin-bottom: 12px; }
+.track-name {
+  font-family: var(--font-d);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+
+/* USE CASES */
+#use { background: var(--white); }
+.use-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  margin-top: 60px;
+}
+.use-cell {
+  padding: 40px 36px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.use-cell:hover { background: var(--bg); }
+.use-cell:nth-child(3n) { border-right: none; }
+.use-cell:nth-child(4), .use-cell:nth-child(5), .use-cell:nth-child(6) { border-bottom: none; }
+.use-cell-icon { font-size: 26px; margin-bottom: 16px; }
+.use-cell h3 {
+  font-family: var(--font-d);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.use-cell p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ROADMAP */
+#roadmap { background: var(--ink); }
+#roadmap .s-tag { color: var(--cyan); }
+#roadmap .s-title { color: #fff; }
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 72px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.tl {
+  padding: 40px 32px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s;
+}
+.tl:hover { background: rgba(255,255,255,0.03); }
+.tl:last-child { border-right: none; }
+.tl:first-child { background: rgba(0,191,223,0.08); border-right-color: rgba(0,191,223,0.15); }
+.tl-year {
+  font-family: var(--font-d);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 16px;
+}
+.tl:first-child .tl-year { color: var(--cyan); }
+.tl-title {
+  font-family: var(--font-d);
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 8px;
+}
+.tl:first-child .tl-title { color: #fff; }
+.tl-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.6; }
+.tl:first-child .tl-desc { color: rgba(255,255,255,0.55); }
+
+/* WAITLIST */
+#waitlist { background: var(--bg); text-align: center; }
+.waitlist-inner { max-width: 600px; margin: 0 auto; }
+.form-row {
+  display: flex;
+  gap: 10px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 6px 6px 24px;
+  align-items: center;
+  max-width: 480px;
+  margin: 40px auto 0;
+}
+.form-row input[type="email"] {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: var(--font-b);
+  color: var(--ink);
+}
+.form-row input::placeholder { color: var(--muted); }
+.form-note { font-size: 12px; color: var(--muted); margin-top: 14px; }
+.success-msg {
+  display: none;
+  color: var(--cyan);
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 28px;
+}
+
+/* FOOTER */
+footer {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 48px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.footer-logo {
+  font-family: var(--font-d);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.footer-logo em { color: var(--cyan); font-style: normal; }
+.footer-links { display: flex; gap: 32px; list-style: none; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.footer-links a:hover { color: var(--ink); }
+.footer-copy { font-size: 12px; color: var(--muted); }
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  nav { padding: 18px 24px; }
+  .nav-links { display: none; }
+  .pill-2, .pill-4 { display: none; }
+  .problem-layout { grid-template-columns: 1fr; gap: 48px; }
+  .tracks-header { grid-template-columns: 1fr; gap: 24px; }
+  .tracks-grid { grid-template-columns: repeat(2, 1fr); }
+  .use-grid { grid-template-columns: 1fr; }
+  .use-cell { border-right: none; }
+  .use-cell:last-child { border-bottom: none; }
+  .timeline { grid-template-columns: 1fr 1fr; }
+  .tl:nth-child(2) { border-right: none; }
+  .tl:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.06); }
+  .tl:nth-child(4) { border-right: none; border-top: 1px solid rgba(255,255,255,0.06); }
+  footer { flex-direction: column; align-items: flex-start; padding: 32px 24px; }
+}
+@media (max-width: 480px) {
+  section.s { padding: 100px 20px; }
+  .timeline { grid-template-columns: 1fr; }
+  .tl { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .tl:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">Sweat<em>IQ</em></a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#tracks">Technology</a></li>
+    <li><a href="#use">Use Cases</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ul>
+  <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag"><span class="live-dot"></span> Prototype in Development</div>
+
+  <h1 class="hero-title">Your sweat<br>knows more<br>than you <span class="c">do.</span></h1>
+
+  <!-- ONE MOTION ELEMENT -->
+  <div class="sensor-orb-wrap">
+    <div class="sensor-orb">
+      <svg class="arc-ring" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="110" cy="110" r="105" stroke="rgba(0,191,223,0.15)" stroke-width="1" stroke-dasharray="4 8" />
+        <circle cx="110" cy="110" r="105" stroke="url(#arcGrad)" stroke-width="2" stroke-dasharray="60 600" stroke-linecap="round" />
+        <defs>
+          <linearGradient id="arcGrad" x1="0" y1="0" x2="220" y2="220" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00BFDF" />
+            <stop offset="100%" stop-color="rgba(0,191,223,0)" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="orb-core">
+        <div class="orb-num">82<span style="font-size:18px;color:var(--muted)">%</span></div>
+        <div class="orb-label">Hydration</div>
+      </div>
+      <div class="orb-pills">
+        <div class="pill pill-1">Na<sup>+</sup> <span class="pill-val">Normal</span></div>
+        <div class="pill pill-2">Sweat <span class="pill-val">Active</span></div>
+        <div class="pill pill-3">Recovery <span class="pill-val">Good</span></div>
+        <div class="pill pill-4">Heat Risk <span class="pill-val">Low</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="hero-sub">SweatIQ is a wearable biosensing platform that reads electrolytes, fluid loss, and stress biomarkers through your sweat. In real time. Before symptoms appear.</p>
+
+  <div class="hero-actions">
+    <a href="#waitlist" class="btn-dark">Join the Waitlist</a>
+    <a href="mailto:hello@sweatiq.in?subject=Partnership Inquiry" class="btn-outline">Partner With Us</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section id="problem" class="s">
+  <div class="container">
+    <div class="problem-layout">
+      <div class="problem-text reveal">
+        <span class="s-tag">The Gap</span>
+        <h2 class="s-title">Wearables track everything except what matters most.</h2>
+        <p class="s-body">Heart rate, steps, sleep — covered. But dehydration, electrolyte loss, heat stress? Completely blind. Devices tell you after performance drops. SweatIQ tells you before.</p>
+        <a href="#tracks" class="btn-dark">See How It Works</a>
+      </div>
+      <div class="problem-stats reveal">
+        <div class="pstat">
+          <div class="pstat-num">75%</div>
+          <div class="pstat-desc">of people are chronically dehydrated with no real-time awareness</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-num">2%</div>
+          <div class="pstat-desc">body water loss cuts cognitive performance by up to 20%</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-num">0</div>
+          <div class="pstat-desc">mainstream wearables today read sweat biomarkers in real time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRACKS -->
+<section id="tracks" class="s">
+  <div class="container">
+    <div class="tracks-header">
+      <div class="reveal">
+        <span class="s-tag">Biomarkers</span>
+        <h2 class="s-title">Eight signals. One patch.</h2>
+      </div>
+      <div class="reveal">
+        <p class="s-body">Electrochemical sensors and microfluidic channels extract precise, continuous data from your sweat. The AI layer converts raw signals into decisions you can act on immediately.</p>
+      </div>
+    </div>
+    <div class="tracks-grid">
+      <div class="track reveal"><div class="track-icon">💧</div><div class="track-name">Hydration Level</div></div>
+      <div class="track reveal"><div class="track-icon">🧂</div><div class="track-name">Sodium Loss Na+</div></div>
+      <div class="track reveal"><div class="track-icon">⚖️</div><div class="track-name">Chloride Balance Cl-</div></div>
+      <div class="track reveal"><div class="track-icon">🌊</div><div class="track-name">Sweat Rate</div></div>
+      <div class="track reveal"><div class="track-icon">🌡️</div><div class="track-name">Heat Stress Risk</div></div>
+      <div class="track reveal"><div class="track-icon">🔋</div><div class="track-name">Recovery Readiness</div></div>
+      <div class="track reveal"><div class="track-icon">😓</div><div class="track-name">Fatigue Indicators</div></div>
+      <div class="track reveal"><div class="track-icon">📈</div><div class="track-name">Body Response Trends</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- USE CASES -->
+<section id="use" class="s">
+  <div class="container">
+    <div class="reveal" style="max-width:520px;">
+      <span class="s-tag">Who It Is For</span>
+      <h2 class="s-title">Built for every high-performance environment.</h2>
+    </div>
+    <div class="use-grid reveal">
+      <div class="use-cell">
+        <div class="use-cell-icon">🏃</div>
+        <h3>Athletes</h3>
+        <p>Stop cramps before they start. Know when to hydrate, not when it is already too late.</p>
+      </div>
+      <div class="use-cell">
+        <div class="use-cell-icon">🏋️</div>
+        <h3>Fitness Users</h3>
+        <p>Hydration feedback calibrated to your body chemistry, not generic averages.</p>
+      </div>
+      <div class="use-cell">
+        <div class="use-cell-icon">🚴</div>
+        <h3>Endurance Sports</h3>
+        <p>Long-race guidance adjusted live to your electrolyte loss and sweat rate.</p>
+      </div>
+      <div class="use-cell">
+        <div class="use-cell-icon">🏥</div>
+        <h3>Hospitals</h3>
+        <p>Continuous fluid loss monitoring for post-operative and high-risk patients.</p>
+      </div>
+      <div class="use-cell">
+        <div class="use-cell-icon">🏗️</div>
+        <h3>Industrial Workforce</h3>
+        <p>Heat stress alerts before it becomes a safety incident on the floor.</p>
+      </div>
+      <div class="use-cell">
+        <div class="use-cell-icon">🪖</div>
+        <h3>Defense Forces</h3>
+        <p>Field hydration intelligence for soldiers in extreme climate conditions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="s">
+  <div class="container">
+    <div class="reveal">
+      <span class="s-tag">Roadmap</span>
+      <h2 class="s-title">From lab bench<br>to global scale.</h2>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl">
+        <div class="tl-year">2025</div>
+        <div class="tl-title">Sensor MVP</div>
+        <div class="tl-desc">Prototype development and lab validation testing</div>
+      </div>
+      <div class="tl">
+        <div class="tl-year">2026</div>
+        <div class="tl-title">OEM Pilots</div>
+        <div class="tl-desc">Integration with smartwatch and fitness band brands</div>
+      </div>
+      <div class="tl">
+        <div class="tl-year">2027</div>
+        <div class="tl-title">Consumer Launch</div>
+        <div class="tl-desc">Retail product and AI companion app go live</div>
+      </div>
+      <div class="tl">
+        <div class="tl-year">2028</div>
+        <div class="tl-title">Global Scale</div>
+        <div class="tl-desc">Enterprise contracts, hospital networks, defense</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist" class="s">
+  <div class="container">
+    <div class="waitlist-inner reveal">
+      <span class="s-tag">Early Access</span>
+      <h2 class="s-title">Be the first to<br>know when we launch.</h2>
+      <p class="s-body" style="max-width:400px; margin:0 auto;">Currently in prototype development. Drop your email and we will reach out for pilots, beta access, and partnership conversations.</p>
+      <div class="form-row" id="formRow">
+        <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" />
+        <button class="btn-dark" onclick="submitForm()">Join Waitlist</button>
+      </div>
+      <p class="form-note">No spam. Waitlist only. Unsubscribe anytime.</p>
+      <div class="success-msg" id="successMsg">You are on the list. We will be in touch soon.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Sweat<em>IQ</em></a>
+  <ul class="footer-links">
+    <li><a href="mailto:hello@sweatiq.in">Contact</a></li>
+    <li><a href="mailto:hello@sweatiq.in?subject=Partnership">Partner</a></li>
+    <li><a href="mailto:hello@sweatiq.in?subject=Investor Inquiry">Investors</a></li>
+    <li><a href="#">Privacy</a></li>
+  </ul>
+  <span class="footer-copy">2025 SweatIQ. hello@sweatiq.in</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 100);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  async function submitForm() {
+    const val = document.getElementById('emailInput').value.trim();
+    if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      document.getElementById('emailInput').style.outline = '2px solid #f87171';
+      return;
+    }
+    const btn = document.querySelector("#formRow .btn-dark");
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    try {
+      const res = await fetch("https://formspree.io/f/xwvzllod", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ email: val })
+      });
+      if (res.ok) {
+        document.getElementById("formRow").style.display = "none";
+        document.querySelector(".form-note").style.display = "none";
+        document.getElementById("successMsg").style.display = "block";
+      } else {
+        btn.textContent = "Try Again";
+        btn.disabled = false;
+        btn.style.background = "#e74c3c";
+      }
+    } catch(err) {
+      btn.textContent = "Try Again";
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById('emailInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitForm();
+  });
+</script>
+</body>
+</html>
